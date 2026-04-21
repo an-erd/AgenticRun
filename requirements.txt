@@ -1,0 +1,6 @@
+pandas>=2.2.0
+openpyxl>=3.1.0
+python-dotenv>=1.0.0
+pydantic>=2.7.0
+openai>=1.30.0
+fitparse>=1.2.0

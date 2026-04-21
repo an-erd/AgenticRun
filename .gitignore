@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables / secrets
+.env
+.env.local
+*.env
+
+# Database (keine persönlichen Daten committen)
+*.db
+*.sqlite
+*.sqlite3
+
+# Streamlit
+.streamlit/secrets.toml
+
+# LLM traces / output artifacts
+traces/
+*.trace.json
+llm_cache/
+
+# Garmin data (keine persönlichen FIT/CSV-Daten)
+*.fit
+*.FIT
+data/
+imports/
+exports/
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# Cursor / IDE
+.cursor/
+.vscode/
+
+# Logs
+*.log
+logs/
+
+# Build / dist
+dist/
+build/
+*.egg-info/
