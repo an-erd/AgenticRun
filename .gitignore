@@ -51,3 +51,6 @@ logs/
 dist/
 build/
 *.egg-info/
+
+out/
+out-backup/
