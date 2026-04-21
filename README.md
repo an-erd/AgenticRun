@@ -1,91 +1,64 @@
-# AgenticRun Prototype
+# 🏃 AgenticRun
 
-A pragmatic Python prototype for an **agentic running analysis system**.
+**Garmin running history — analysis, trends, and coaching recommendations**
 
-It is intentionally built as a **modular workflow with specialized agents** instead of a single opaque "super agent".
+A local Python + Streamlit analytics app that turns 10 years of Garmin data 
+into explainable performance insight. Deterministic analytics first, 
+LLM as explainer second.
+
+---
 
 ## What it does
 
-- imports Garmin CSV exports
-- normalizes session-level metrics
-- stores runs in SQLite
-- classifies the session type
-- compares the run to similar historical sessions
-- generates a conservative training recommendation
-- optionally asks an LLM to turn the structured output into a readable summary
+- Imports Garmin FIT, CSV, and ZIP archives at scale
+- Classifies sessions by intensity domain (threshold, VO2, easy/recovery)
+- Compares each run against prior sessions in the same training family
+- Derives deterministic signals: trend, execution quality, fatigue, fitness
+- Generates structured coaching recommendations with a dominant rule ID
+- Uses OpenAI to summarize findings in natural language — grounded, 
+  not invented
 
-## Architecture
+## Architecture principle
 
-The prototype uses these modules:
+Import → Classify → Analyse → Compare → Recommend → LLM Explain
 
-- `ImportAgent` – reads Garmin CSV files and extracts one normalized run per file
-- `SessionAnalysisAgent` – classifies the run and calculates basic signals
-- `TrendAgent` – compares the run against historical runs in the database
-- `RecommendationAgent` – derives the next-step recommendation
-- `OutputAgent` – writes CSV/JSON output and optional Markdown summary
+The LLM receives structured deterministic findings as context.
+It summarizes and phrases — it does not decide.
 
-There is **no heavy framework dependency** and no mandatory orchestration framework.
-The pipeline is coordinated by a simple Python entrypoint and a shared `RunState` object.
+## Tech stack
 
-## Quick start
+- Python
+- Streamlit
+- SQLite
+- OpenAI API
+- Garmin FIT file parsing
+- Built with Cursor
+
+## Screenshots
+
+[Screenshot Dashboard]
+[Screenshot Interval Analysis]
+
+## Setup
 
 ```bash
-python3 -m venv .venv
+git clone https://github.com/an-erd/AgenticRun.git
+cd AgenticRun
+python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python main.py ingest --input ./data
+cp .env.example .env
+# Add your OpenAI API key to .env
+streamlit run app.py
 ```
 
-This will:
-- create `agenticrun.db`
-- parse all CSV files in `./data`
-- write outputs to `./out`
+## Key numbers (real data)
 
-## Optional LLM summaries
+- 1,216 running activities
+- 10 years of history (2016–2026)
+- 14,700 FIT files processed in bulk import
+- 0 errors
 
-Set your API key in `.env`:
+## License
 
-```bash
-OPENAI_API_KEY=your_key_here
-OPENAI_MODEL=gpt-4.1-mini
-```
-
-Then run:
-
-```bash
-python main.py ingest --input ./data --llm
-```
-
-If no API key is present, the system still works and falls back to deterministic summaries.
-
-## Folder structure
-
-```text
-AgenticRunPrototype/
-├── main.py
-├── requirements.txt
-├── .env.example
-├── data/
-├── out/
-└── agenticrun/
-    ├── agents/
-    ├── core/
-    ├── services/
-    └── utils/
-```
-
-## Current scope
-
-This is a **Prototype / MVP 1.5**:
-- works with the sample Garmin CSV variants you uploaded
-- uses conservative rules
-- does not do medical evaluation
-- does not write back to Garmin or adjust external plans automatically
-
-## Suggested next steps
-
-1. refine session classification
-2. add workout-intent recognition from interval patterns
-3. add weekly load logic and fatigue guardrails
-4. improve LLM prompt templates
-5. add a simple local UI with Streamlit or FastAPI
+MIT
